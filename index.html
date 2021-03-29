@@ -16,6 +16,16 @@
       .shower {
         --slide-ratio: calc(16 / 9);
       }
+      table.query-results thead tr {
+          border: solid 1px gray;
+      }
+      table.query-results thead td {
+          font-weight: bold;
+          background-color: white;
+      }
+      table.query-results tbody tr {
+          border: solid 1px gray;
+      }
     </style>
   </head>
 
@@ -34,30 +44,94 @@
 
     <section id="title" class="slide title" inlist="" rel="schema:hasPart" resource="#title">
       <h2 property="schema:name">SPARQL Query Evaluation</h2>
+      <h3>How do SPARQL query engines work?</h3>
       <ul class="author inline">
           <li class="current"><a href="https://www.rubensworks.net/">Ruben Taelman</a></li>
       </ul>
       <p class="affiliation"><a href="http://idlab.technology/">Ghent University – imec – IDLab, Belgium</a></p>
     </section>
 
-    <section id="start" class="slide" style="background-image: url('img/TODO.jpg')" inlist="" rel="schema:hasPart" resource="#start">
-        <h2 property="schema:name" class="big" style="margin-top: 20px; color: white; text-shadow: 2px 2px black">INTRO</h2>
-        <ul style="color: white; text-shadow: 2px 2px black; font-size: 1.3em">
-            <li>TODO</li>
+    <section id="start" class="slide" inlist="" rel="schema:hasPart" resource="#start">
+        <h2 property="schema:name">SPARQL querying over RDF datasets</h2>
+        <ul>
+            <li><strong>SPARQL</strong>: a language for reading and updating data in RDF datasets via <em>declarative queries</em>.</li>
+            <li>
+                Different query forms:<br /><br />
+                <ul>
+                    <li><code>SELECT</code>: selecting values in tabular form<span class="next"> <strong>&rarr; focus of this presentation</strong></span></li>
+                    <li><code>CONSTRUCT</code>: construct new triples</li>
+                    <li><code>ASK</code>: check if data exists</li>
+                    <li><code>DESCRIBE</code>: describe a given resource</li>
+                    <li><code>INSERT</code>: insert new triples</li>
+                    <li><code>DELETE</code>: delete existing triples</li>
+                </ul>
+            </li>
         </ul>
+    </section>
+    
+    <section id="example" class="slide" inlist="" rel="schema:hasPart" resource="#example">
+        <h2 property="schema:name">Find all artists born in York</h2>
+        <ul>
+            <li><a href="http://query.linkeddatafragments.org/#transientDatasources=https%3A%2F%2Ffragments.dbpedia.org%2F2016-04%2Fen&query=SELECT%20%3Fname%20%3FdeathDate%20WHERE%20%7B%0A%20%20%3Fperson%20a%20dbpedia-owl%3AArtist%3B%0A%20%20%20%20%20%20%20%20%20%20rdfs%3Alabel%20%3Fname%3B%0A%20%20%20%20%20%20%20%20%20%20dbpedia-owl%3AbirthPlace%20%5B%20rdfs%3Alabel%20%22York%22%40en%20%5D.%0A%20%20FILTER%20LANGMATCHES(LANG(%3Fname)%2C%20%20%22EN%22)%0A%20%20OPTIONAL%20%7B%20%3Fperson%20dbpprop%3AdateOfDeath%20%3FdeathDate.%20%7D%0A%7D"><pre style="font-size: 0.8em">SELECT ?name ?deathDate WHERE {
+  ?person a dbpedia-owl:Artist;
+          rdfs:label ?name;
+          dbpedia-owl:birthPlace [ rdfs:label "York"@en ].
+  FILTER LANGMATCHES(LANG(?name),  "EN")
+  OPTIONAL { ?person dbpprop:dateOfDeath ?deathDate. }
+}
+</pre></a></li>
+        </ul>
+        <table class="next query-results">
+            <thead>
+                <tr><td>name</td><td>deathDate</td></tr>
+            </thead>
+            <tbody>
+                <tr><td>Albert Joseph Moore</td><td></td></tr>
+                <tr><td>Charles Francis Hansom</td><td>1888</td></tr>
+                <tr><td>David Reed (comedian)</td><td></td></tr>
+                <tr><td>Dustin Gee</td><td></td></tr>
+                <tr><td>E Ridsdale Tate</td><td>1922</td></tr>
+            </tbody>
+        </table>
+    </section>
+    
+    <section id="how1" class="slide" inlist="" rel="schema:hasPart" resource="#how1">
+        <h2 property="schema:name" class="big">How do query engines process a query?</h2>
+        <p style="text-align: center; font-size: 1.3em" class="next">
+            RDF dataset + SPARQL query <br/>
+            &darr;<br />
+            <strong>...</strong><br />
+            &darr;<br/>
+            query results
+        </p>
+    </section>
+    
+    <section id="how2" class="slide" inlist="" rel="schema:hasPart" resource="#how2">
+        <h2 property="schema:name" class="big">How do query engines process a query?</h2>
+        <p style="text-align: center; font-size: 1.3em">
+            RDF dataset + SPARQL query <br/>
+            &darr;<br />
+            <strong>SPARQL query processing</strong><br />
+            &darr;<br/>
+            query results
+        </p>
     </section>
 	
     <section id="index" class="slide index" inlist="" rel="schema:hasPart" resource="#index">
       <ul>
-        <li><a href="#index-a">TODO</a></li>
-		<li><a href="#index-b">TODO</a></li>
+        <li><a href="#index-basics">Basics and Terminology</a></li>
+		<li><a href="#index-parsing">Parsing</a></li>
+        <li><a href="#index-optimization">Optimization</a></li>
+        <li><a href="#index-evaluation">Evaluation</a></li>
       </ul>
     </section>
     
-    <section id="index-a" class="slide index" inlist="" rel="schema:hasPart" resource="#index-a">
+    <section id="index-basics" class="slide index" inlist="" rel="schema:hasPart" resource="#index-basics">
       <ul>
-        <li class="current"><a href="#index-a">TODO</a></li>
-		<li><a href="#index-b">TODO</a></li>
+        <li class="current"><a href="#index-basics">Basics and Terminology</a></li>
+		<li><a href="#index-parsing">Parsing</a></li>
+        <li><a href="#index-optimization">Optimization</a></li>
+        <li><a href="#index-evaluation">Evaluation</a></li>
       </ul>
     </section>
 	
@@ -70,6 +144,42 @@
           </li>
           <li>B</li>
           <li>C</li>
+      </ul>
+    </section>
+    
+    <section id="index-parsing" class="slide index" inlist="" rel="schema:hasPart" resource="#index-parsing">
+      <ul>
+        <li><a href="#index-basics">Basics and Terminology</a></li>
+		<li class="current"><a href="#index-parsing">Parsing</a></li>
+        <li><a href="#index-optimization">Optimization</a></li>
+        <li><a href="#index-evaluation">Evaluation</a></li>
+      </ul>
+    </section>
+    
+    <section id="index-optimization" class="slide index" inlist="" rel="schema:hasPart" resource="#index-optimization">
+      <ul>
+        <li><a href="#index-basics">Basics and Terminology</a></li>
+		<li><a href="#index-parsing">Parsing</a></li>
+        <li class="current"><a href="#index-optimization">Optimization</a></li>
+        <li><a href="#index-evaluation">Evaluation</a></li>
+      </ul>
+    </section>
+    
+    <section id="index-evaluation" class="slide index" inlist="" rel="schema:hasPart" resource="#index-evaluation">
+      <ul>
+        <li><a href="#index-basics">Basics and Terminology</a></li>
+		<li><a href="#index-parsing">Parsing</a></li>
+        <li><a href="#index-optimization">Optimization</a></li>
+        <li class="current"><a href="#index-evaluation">Evaluation</a></li>
+      </ul>
+    </section>
+    
+    <section id="index-final" class="slide index" inlist="" rel="schema:hasPart" resource="#index-final">
+      <ul>
+        <li><a href="#index-basics">Basics and Terminology</a></li>
+		<li><a href="#index-parsing">Parsing</a></li>
+        <li><a href="#index-optimization">Optimization</a></li>
+        <li><a href="#index-evaluation">Evaluation</a></li>
       </ul>
     </section>
 	
