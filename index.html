@@ -135,15 +135,70 @@
       </ul>
     </section>
 	
-    <section id="some-slide" class="slide" inlist="" rel="schema:hasPart" resource="#some-slide">
-      <h2 property="schema:name">TODO: A regular slide</h2>
+    <section id="basics-restrict" class="slide" inlist="" rel="schema:hasPart" resource="#basics-restrict">
+      <h2 property="schema:name">Basic Graph Patterns enable graph pattern matching</h2>
       <ul>
           <li>
-          	  <h3>A</h3>
-			  <span class="indent">TODO: Description</span>
+          	  <h3>Basic Graph Pattern (BGP)</h3>
+			  <span class="indent">A collection of <em>triple patterns</em>.</span>
           </li>
-          <li>B</li>
-          <li>C</li>
+          <li>
+<pre style="font-size: 0.8em">    ?person a dbpedia-owl:Artist.
+    ?person rdfs:label ?name.
+    ?person dbpedia-owl:birthPlace ?birthPlace.
+</pre></li>
+          <li>
+          	  <h3>Triple Pattern</h3>
+			  <span class="indent">A triple in which any component may be a variable.</span><br />
+			  <span class="indent">Variables start with <code>?</code>, followed by a <em>label</em>. (e.g. <code>?name</code>)</span>
+          </li>
+          <li>
+          	  <h3>More complex operators are possible</h3>
+    		  <span class="indent"><code>OPTIONAL</code>, <code>UNION</code>, <code>FILTER</code>, ...</span>
+          </li>
+      </ul>
+    </section>
+    
+    <section id="basics-solutions" class="slide" inlist="" rel="schema:hasPart" resource="#basics-solutions">
+      <h2 property="schema:name">Query results representation</h2>
+      <ul>
+          <li>
+          	  <h3>Solution Sequence</h3>
+			  <span class="indent">A list of solution mappings.</span>
+          </li>
+          <li>
+          	  <h3>Solution Mapping</h3>
+			  <span class="indent">Mapping from a set of variable labels to a set of RDF terms.</span>
+          </li>
+      </ul>
+      <em>1 solution sequence with 3 solution mappings:</em>
+      <table class="query-results">
+          <thead>
+              <tr><td>name</td><td>birthplace</td></tr>
+          </thead>
+          <tbody>
+              <tr><td>Bob Brockmann</td><td>http://dbpedia.org/resource/Louisiana</td></tr>
+              <tr><td>Bennie Nawahi</td><td>http://dbpedia.org/resource/Honolulu</td></tr>
+              <tr><td>Weird Al Yankovic</td><td>http://dbpedia.org/resource/Downey,_California</td></tr>
+          </tbody>
+      </table>
+    </section>
+    
+    <section id="basics-steps" class="slide" inlist="" rel="schema:hasPart" resource="#basics-steps">
+      <h2 property="schema:name">Steps in SPARQL query processing</h2>
+      <ul>
+          <li>
+          	  <h3>1. Parsing</h3>
+			  <span class="indent">Transform a SPARQL query string into an algebra expression</span>
+          </li>
+          <li>
+          	  <h3>2. Optimization</h3>
+			  <span class="indent">Transform algebra expression into a query plan</span>
+          </li>
+          <li>
+          	  <h3>3. Execution</h3>
+			  <span class="indent">Executes query plan to obtain query results</span>
+          </li>
       </ul>
     </section>
     
