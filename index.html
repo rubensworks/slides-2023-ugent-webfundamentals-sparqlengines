@@ -211,6 +211,63 @@
       </ul>
     </section>
     
+    <section id="parsing-ast" class="slide" inlist="" rel="schema:hasPart" resource="#parsing-ast">
+      <h2 property="schema:name">Parsing: transform query string into Abstract Syntax Tree</h2>
+      <ul>
+          <li>
+          	  <h3>Abstract Syntax Tree (AST) = SPARQL Algebra</h3>
+			  <span class="indent">Algebraic <strong>datastructure</strong> that represents the query structure</span><br /><br />
+              <span class="indent"><strong>Easier</strong> for engines to work with than strings</span><br /><br />
+              <span class="indent">Each node is a separate <strong>operator</strong>: join, BGP, filter, ...</span><br /><br />
+              <span class="indent">Enables algebraic query <strong>optimizations</strong></span><br /><br />
+              <span class="indent">Provides basis for <strong>query planning</strong></span><br /><br />
+          </li>
+      </ul>
+    </section>
+    
+    <section id="parsing-ast-example" class="slide" inlist="" rel="schema:hasPart" resource="#parsing-ast-example">
+      <h2 property="schema:name">Abstract Syntax Tree example</h2>
+      <div style="float:left; width: 400px; height: 500px">
+        Input: <pre style="font-size: 0.5em">SELECT ?x ?y ?z WHERE {
+  ?x ?y ?z
+}</pre>
+      </div>
+      <div>
+        Output: <pre style="font-size: 0.5em">{
+  "type": "project",
+  "input": {
+    "type": "bgp",
+    "patterns": [
+      {
+        "type": "pattern",
+        "value": "",
+        "subject": {
+          "termType": "Variable",
+          "value": "x"
+        },
+        "predicate": {
+          "termType": "Variable",
+          "value": "y"
+        },
+        "object": {
+          "termType": "Variable",
+          "value": "z"
+        }
+      }
+    ]
+  },
+  "variables": [
+    { "termType": "Variable",
+      "value": "x" },
+    { "termType": "Variable",
+      "value": "y" },
+    { "termType": "Variable",
+      "value": "z" }
+  ]
+}</pre>
+      </div>
+    </section>
+    
     <section id="index-optimization" class="slide index" inlist="" rel="schema:hasPart" resource="#index-optimization">
       <ul>
         <li><a href="#index-basics">Basics and Terminology</a></li>
@@ -218,6 +275,126 @@
         <li class="current"><a href="#index-optimization">Optimization</a></li>
         <li><a href="#index-evaluation">Evaluation</a></li>
       </ul>
+    </section>
+    
+    <section id="optimization-types" class="slide" inlist="" rel="schema:hasPart" resource="#optimization-types">
+      <h2 property="schema:name">Why is optimization needed?</h2>
+      <ul>
+          <li>
+          	  <h3>Queries are declarative</h3>
+			  <span class="indent">They say <em>what</em> needs to be done, not <em>how</em>.</span><br /><br />
+              <span class="indent">Transformation into executable code can happen in many different ways.</span>
+          </li>
+          <li>
+          	  <h3>Factors that influence performance</h3>
+              <span class="indent">Dataset</span><br /><br />
+			  <span class="indent">Order of operators in AST</span><br /><br />
+              <span class="indent">Available operator algorithm implementations</span><br /><br />
+              <span class="indent">Available data indexes</span>
+          </li>
+      </ul>
+    </section>
+    
+    <section id="optimization-types" class="slide" inlist="" rel="schema:hasPart" resource="#optimization-types">
+      <h2 property="schema:name">Different levels of optimization</h2>
+      <ul>
+          <li>
+          	  <h3>Algebraic optimization</h3>
+			  <span class="indent">Independent of underlying data</span><br /><br />
+              <span class="indent">Based on formally provable equivalence of operations</span>
+          </li>
+          <li>
+          	  <h3>Low-level optimization</h3>
+			  <span class="indent">Based on the underlying data</span><br /><br />
+              <span class="indent">Select and configure specific algorithms of algebra operators</span>
+          </li>
+      </ul>
+    </section>
+    
+    <section id="optimization-algebraic" class="slide" inlist="" rel="schema:hasPart" resource="#optimization-algebraic">
+      <h2 property="schema:name">Algebraic optimization</h2>
+      <ul>
+          <li>
+          	  <h3>Data-independent</h3>
+			  <span class="indent">Independent of the underlying dataset</span>
+          </li>
+          <li>
+          	  <h3>Preserves evaluation semantics</h3>
+			  <span class="indent">Optimized algebra produces same results as executing unoptimized algebra</span>
+          </li>
+          <li>
+          	  <h3>Trade-off between optimization and performance</h3>
+			  <span class="indent">Algebraic optimization can take a lot of time,</span><br />
+              <span class="indent">sometimes even more than execution the sub-optimal algebra.</span>
+          </li>
+      </ul>
+    </section>
+    
+    <section id="optimization-algebraic-orderby-distinct" class="slide" inlist="" rel="schema:hasPart" resource="#optimization-algebraic-orderby-distinct">
+      <h2 property="schema:name">Example: <code>ORDER BY</code> + <code>DISTINCT</code></h2>
+      <ul>
+          <li>
+			  <span><code>ORDER BY</code>: Sort solution mappings by the given variable</span>
+          </li>
+          <li>
+			  <span><code>DISTINCT</code>: Remove duplicate solution mappings</span>
+          </li>
+          <li>
+			  <span>SPARQL requires <code>DISTINCT</code> to happen <em>after</em> <code>ORDER BY</code></span>
+          </li>
+          <li>
+			  <span>Performance issues when sorting many non-distinct solution mappings</span>
+          </li>
+          <li>
+			  <span>Optimization: Apply <code>DISTINCT</code> before <code>ORDER BY</code></span>
+          </li>
+      </ul>
+          <div style="float: left; width: 400px; height: 400px;">
+              Input:
+              <pre style="font-size: 0.7em">{
+  "type": "distinct",
+  "input": {
+    "type": "orderby",
+    "variable": "x",
+    "input": { ... }
+  }
+}</pre>
+          </div>
+          <div>
+              Output:
+              <pre style="font-size: 0.7em">{
+  "type": "orderby",
+  "variable": "x",
+  "input": {
+    "type": "distinct",
+    "input": { ... }
+  }
+}</pre>
+          </div>
+      </div>
+    </section>
+    
+    <section id="optimization-lowlevel" class="slide" inlist="" rel="schema:hasPart" resource="#optimization-lowlevel">
+      <h2 property="schema:name">Low-level optimization</h2>
+      <ul>
+          <li>
+          	  <h3>Data-dependent</h3>
+			  <span class="indent">Based on the underlying dataset, and derived indexes.</span>
+          </li>
+          <li>
+          	  <h3>Minimize computational complexity</h3>
+			  <span class="indent">Reduce the number of intermediary results.</span>
+          </li>
+          <li>
+          	  <h3>Select and configure specific algorithms of algebra operators</h3>
+			  <span class="indent">Different algorithms behave better in certain situations.</span>
+          </li>
+      </ul>
+    </section>
+    
+    <section id="optimization-lowlevel-joinorder" class="slide" inlist="" rel="schema:hasPart" resource="#optimization-lowlevel-joinorder">
+      <h2 property="schema:name">Example: join order in BGP</h2>
+      TODO: TPF example from web fundamentals
     </section>
     
     <section id="index-evaluation" class="slide index" inlist="" rel="schema:hasPart" resource="#index-evaluation">
