@@ -220,7 +220,7 @@
               <span class="indent">Each node is a separate <strong>operator</strong>: join, BGP, filter, ...</span><br /><br />
               <span class="indent"><strong>Easier</strong> for engines to work with than strings</span><br /><br />
               <span class="indent">Enables algebraic query <strong>optimizations</strong></span><br /><br />
-              <span class="indent">Provides basis for <strong>query planning</strong></span><br /><br />
+              <span class="indent">A.k.a <em>query plan</em> &rarr; basis for <strong>query planning</strong></span><br /><br />
           </li>
       </ul>
     </section>
@@ -501,6 +501,28 @@
 		<li><a href="#index-parsing">Parsing</a></li>
         <li><a href="#index-optimization">Optimization</a></li>
         <li class="current"><a href="#index-evaluation">Evaluation</a></li>
+      </ul>
+    </section>
+    
+    <section id="evaluation-steps" class="slide" inlist="" rel="schema:hasPart" resource="#evaluation-steps">
+      <h2 property="schema:name">Evaluating the optimized query plan</h2>
+      <ul>
+          <li>
+          	  <h3>Bottom-up</h3>
+			  <span class="indent">Start with leaves in query plan, and work up to the root.</span>
+          </li>
+          <li>
+          	  <h3>Parallelisation</h3>
+			  <span class="indent">Evaluate independent branches in parallel on different threads.</span>
+          </li>
+          <li>
+          	  <h3>Pipelining</h3>
+			  <span class="indent">Reduce time to first result.</span>
+          </li>
+          <li>
+          	  <h3>Adaptive processing</h3>
+			  <span class="indent">Advanced: adaptively modify the query plan at runtime.</span>
+          </li>
       </ul>
     </section>
     
