@@ -163,12 +163,12 @@
       <h2 property="schema:name">Query results representation</h2>
       <ul>
           <li>
-          	  <h3>Solution Sequence</h3>
-			  <span class="indent">A list of solution mappings.</span>
-          </li>
-          <li>
           	  <h3>Solution Mapping</h3>
 			  <span class="indent">Mapping from a set of variable labels to a set of RDF terms.</span>
+          </li>
+          <li>
+          	  <h3>Solution Sequence</h3>
+			  <span class="indent">A list of solution mappings.</span>
           </li>
       </ul>
       <em>1 solution sequence with 3 solution mappings:</em>
@@ -212,10 +212,10 @@
     </section>
     
     <section id="parsing-ast" class="slide" inlist="" rel="schema:hasPart" resource="#parsing-ast">
-      <h2 property="schema:name">Parsing: transform query string into Abstract Syntax Tree</h2>
+      <h2 property="schema:name">Parsing: transform query string into SPARQL Algebra</h2>
       <ul>
           <li>
-          	  <h3>Abstract Syntax Tree (AST) = SPARQL Algebra</h3>
+          	  <h3>SPARQL Algebra = Abstract Syntax Tree (AST)</h3>
 			  <span class="indent">Algebraic <strong>datastructure</strong> that represents the query structure</span><br /><br />
               <span class="indent">Each node is a separate <strong>operator</strong>: join, BGP, filter, ...</span><br /><br />
               <span class="indent"><strong>Easier</strong> for engines to work with than strings</span><br /><br />
@@ -226,7 +226,7 @@
     </section>
     
     <section id="parsing-ast-example" class="slide" inlist="" rel="schema:hasPart" resource="#parsing-ast-example">
-      <h2 property="schema:name">Abstract Syntax Tree example</h2>
+      <h2 property="schema:name">SPARQL Algebra example</h2>
       <div style="float:left; width: 400px; height: 500px">
         Input: <pre style="font-size: 0.5em">SELECT ?x ?y ?z WHERE {
   ?x ?y ?z
@@ -702,7 +702,7 @@
           	  <h3>Operators with multiple independent inputs</h3>
               <span class="indent">UNION branches are fully independent</span><br /><br />
 			  <span class="indent">Triple patterns in BGPs can be handled independently based on the algorithm</span><br /><br />
-              <span class="indent">Some joins can be partially handled independently (e.g. sorting step in sort-merge join)</span><br /><br />
+              <span class="indent">Some joins can be partially handled independently (e.g. sorting step in sort-merge join)</span>
           </li>
           <li>
           	  <h3>Local threads vs. distributed machines</h3>
