@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head prefix="foaf: http://xmlns.com/foaf/0.1/">
-    <title>SPARQL Query Evaluation</title>
+    <title>SPARQL Query Processing</title>
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -32,7 +32,7 @@
   <body class="shower list" prefix="rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns# foaf: http://xmlns.com/foaf/0.1/ owl: http://www.w3.org/2002/07/owl# xsd: http://www.w3.org/2001/XMLSchema# org: http://www.w3.org/ns/org# schema: http://schema.org/ cite: http://purl.org/spar/cito/" typeof="schema:PresentationDigitalDocument">
     <header class="caption">
       <div class="title">
-        <h1 property="schema:name">SPARQL Query Evaluation</h1>
+        <h1 property="schema:name">SPARQL Query Processing</h1>
       </div>
       <div class="captiondata">
         <p class="author" rel="schema:author"><a href="https://www.rubensworks.net/#me">Ruben Taelman</a></p>
@@ -43,7 +43,7 @@
     </header>
 
     <section id="title" class="slide title" inlist="" rel="schema:hasPart" resource="#title">
-      <h2 property="schema:name">SPARQL Query Evaluation</h2>
+      <h2 property="schema:name">SPARQL Query Processing</h2>
       <h3>How do SPARQL query engines work?</h3>
       <ul class="author inline">
           <li class="current"><a href="https://www.rubensworks.net/">Ruben Taelman</a></li>
@@ -72,14 +72,14 @@
     <section id="example" class="slide" inlist="" rel="schema:hasPart" resource="#example">
         <h2 property="schema:name">Find all artists born in York</h2>
         <ul>
-            <li><a href="http://query.linkeddatafragments.org/#transientDatasources=https%3A%2F%2Ffragments.dbpedia.org%2F2016-04%2Fen&query=SELECT%20%3Fname%20%3FdeathDate%20WHERE%20%7B%0A%20%20%3Fperson%20a%20dbpedia-owl%3AArtist%3B%0A%20%20%20%20%20%20%20%20%20%20rdfs%3Alabel%20%3Fname%3B%0A%20%20%20%20%20%20%20%20%20%20dbpedia-owl%3AbirthPlace%20%5B%20rdfs%3Alabel%20%22York%22%40en%20%5D.%0A%20%20FILTER%20LANGMATCHES(LANG(%3Fname)%2C%20%20%22EN%22)%0A%20%20OPTIONAL%20%7B%20%3Fperson%20dbpprop%3AdateOfDeath%20%3FdeathDate.%20%7D%0A%7D"><pre style="font-size: 0.8em">SELECT ?name ?deathDate WHERE {
+            <li>SELECT ?name ?deathDate WHERE {
   ?person a dbpedia-owl:Artist;
           rdfs:label ?name;
           dbpedia-owl:birthPlace [ rdfs:label "York"@en ].
   FILTER LANGMATCHES(LANG(?name),  "EN")
   OPTIONAL { ?person dbpprop:dateOfDeath ?deathDate. }
 }
-</pre></a></li>
+</pre></li>
         </ul>
         <table class="next query-results">
             <thead>
@@ -196,7 +196,7 @@
 			  <span class="indent">Transform algebra expression into a query plan</span>
           </li>
           <li>
-          	  <h3>3. Execution</h3>
+          	  <h3>3. Evaluation</h3>
 			  <span class="indent">Executes query plan to obtain query results</span>
           </li>
       </ul>
@@ -217,7 +217,7 @@
           <li>
           	  <h3>SPARQL Algebra = Abstract Syntax Tree (AST)</h3>
 			  <span class="indent">Algebraic <strong>datastructure</strong> that represents the query structure</span><br /><br />
-              <span class="indent">Each node is a separate <strong>operator</strong>: join, BGP, filter, ...</span><br /><br />
+              <span class="indent">Tree where each node is a separate <strong>operator</strong>: join, BGP, filter, ...</span><br /><br />
               <span class="indent"><strong>Easier</strong> for engines to work with than strings</span><br /><br />
               <span class="indent">Enables algebraic query <strong>optimizations</strong></span><br /><br />
               <span class="indent">A.k.a <em>query plan</em> &rarr; basis for <strong>query planning</strong></span><br /><br />
@@ -426,11 +426,11 @@
           	  <h3>Restrictions of join algorithms</h3>
               <span class="indent">Some algorithms only work in certain cases</span>
           </li>
-          <li>
+          <!--<li>
           	  <h3>Join cardinality statistics of patterns</h3>
               <span class="indent">Statistics on intermediate results when joining two patterns</span><br />
               <span class="indent"><em>Difficult to store and manage!</em></span>
-          </li>
+          </li>-->
       </ul>
     </section>
     
