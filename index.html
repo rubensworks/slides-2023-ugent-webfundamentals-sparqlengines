@@ -72,7 +72,7 @@
     <section id="example" class="slide" inlist="" rel="schema:hasPart" resource="#example">
         <h2 property="schema:name">Find all artists born in York</h2>
         <ul>
-            <li>SELECT ?name ?deathDate WHERE {
+            <li><pre>SELECT ?name ?deathDate WHERE {
   ?person a dbpedia-owl:Artist;
           rdfs:label ?name;
           dbpedia-owl:birthPlace [ rdfs:label "York"@en ].
