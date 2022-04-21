@@ -1,7 +1,7 @@
-# Slides for Web Fundamentals course 2021 on SPARQL Query Evaluation
-[![Build Status](https://github.com/rubensworks/slides-2021-ugent-webfundamentals-sparqlengines/workflows/Build%20and%20Deploy/badge.svg)](https://rubensworks.github.io/slides-2021-ugent-webfundamentals-sparqlengines/)
+# Slides for Web Fundamentals course 2022 on SPARQL Query Evaluation
+[![Build Status](https://github.com/rubensworks/slides-2022-ugent-webfundamentals-sparqlengines/workflows/Build%20and%20Deploy/badge.svg)](https://rubensworks.github.io/slides-2022-ugent-webfundamentals-sparqlengines/)
 
-**Live version: https://rubensworks.github.io/slides-2021-ugent-webfundamentals-sparqlengines/**
+**Live version: https://rubensworks.github.io/slides-2022-ugent-webfundamentals-sparqlengines/**
 
 These slides are created using the [shower](https://github.com/shower/shower) framework.
 
